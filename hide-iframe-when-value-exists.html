@@ -1,0 +1,43 @@
+<!-- 
+This example is for a liquid template. That's why in line 6, you can find some double curly brackets.
+I used Nocodeapi to check if a value exists and Tally Form to input new values.
+First, we check if the value exists with a call to Nocodeapi and use an iframe inside a div to hide if the value exists.
+-->
+
+<script>
+    //check if value exists 
+    let checkIfExists;
+    let apiCall = "https://v1.nocodeapi.com/[USER]/google_sheets/[YOUR-KEY]/search?tabId=db&searchKey=id&searchValue={{product.id}}-{{user.email}}&cachetime=0";
+    console.log(apiCall);
+    let requestOptionsCheck = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+
+    fetch(apiCall, requestOptionsCheck)
+      .then(response => response.text())
+      .then(result => {console.log(result);checkIfExists = result.length;})
+      .then(
+                function(hideFeedbackDiv) {
+                   console.log(checkIfExists);
+                    if(checkIfExists > 2){
+                      console.log("hided");
+                      document.getElementById('feedback-from-post').style.display = 'none';
+                    }else{console.log("shown")};
+                })
+      .catch(error => console.log('error', error));
+
+</script>
+
+<!-- div with the iframe of the Tally form -->
+<div id="feedback-from-post">
+    <iframe
+        src="https://tally.so/embed/[YOUR-FORM-ID]?alignLeft=1&hideTitle=1&transparentBackground=1&post-id={{product.id}}&user={{user.email}}"
+        width="100%"
+        height="300"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+        title="null">
+    </iframe>
+</div>
